@@ -75,6 +75,8 @@ class Map:
     def __init__(self, fields_x, fields_y):
         self.fields_x = fields_x
         self.fields_y = fields_y
+        
+        
 
     def generate_map(self,fields_x, fields_y):
         new_map = np.zeros(shape =(fields_x,fields_y))
@@ -118,6 +120,8 @@ class Map:
                 #print(new_map[x][y])
         print(new_map)
         return new_map
+
+    
     
         
 
@@ -204,18 +208,46 @@ def throw_coin():
 #Main Game Loop Methods :
 
 
+#Metoda sprawdzająca pozycję gracza na mapie losująca lokacje z dostępnej listy
+#dodająca wylosowanego potwora do lokacji i zarządzająca co dalej
+def into_room(player,game_map):
+    if(game_map[player.pos_y][player.pos_x] == 4):
+        print("Jestę na statcie")
+    elif(new_map[player.pos_y][player.pos_x] == 1):
+        print("Poszedłem do przodu")
+
+
+
+#Metoda sprawdzająca możliwe ścierzki i wyświetlająca opcje podróży na ekranie
+def check_roads(player,game_map):
+    if(game_map[player.pos_y + 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+        print("Naciśnij 'f' aby iść naprzód")
+    if(game_map[player.pos_y - 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+        print("Naciśnij 'b' aby iść do tylu")
+    if(game_map[player.pos_y][player.pos_x + 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+        print("Naciśnij 'l' aby iść w lewo")
+    if(game_map[player.pos_y][player.pos_x - 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+        print("Naciśnij 'r' aby iść w prawo")
+
 
 #######################################################################
 #Temporary test area :
 
 game_map = Map(5,7)
 
-game_map.generate_map(5,7)
+new_map = game_map.generate_map(5,7)
 
 
 Stefan = Player('Stefan',30,0,1,0,'fist','Stefan',[])
 print(Stefan.pos_x, Stefan.pos_y)
 
-move_f(Stefan)
+
 print(Stefan.pos_x, Stefan.pos_y)
+
+into_room(Stefan,new_map)
+check_roads(Stefan,new_map)
+move_f(Stefan)
+into_room(Stefan,new_map)
+check_roads(Stefan,new_map)
+
 
