@@ -1,6 +1,7 @@
 import random
 import numpy as np
 
+
 #Siemowit Silnik stworzony do tworzenia gry typu Dungeon Crawler
 #Author: Rafał Kondziela
 
@@ -43,6 +44,11 @@ class Player:
     # - name ( nazwa broni)
     # - ATT (Obrażenia zadawane przez broń
 
+class Weapon:
+    def __init__(self,name,ATT):
+        self.name = name
+        self.ATT = ATT
+
 
 #Moster Class
 
@@ -50,6 +56,12 @@ class Player:
     # - name (nazwa potwora)
     # - HP(Ilość życia potwora)
     # - ATT (ilość ataku potwora)
+
+class Moster:
+    def __init__(self,name,HP,ATT):
+        self.name = name
+        self.HP = HP
+        self.ATT = ATT
 
 
 #Map Class
@@ -104,10 +116,10 @@ class Map:
                     
                    
                 #print(new_map[x][y])
-
-                
         print(new_map)
         return new_map
+    
+        
 
 #Room Class
 
@@ -129,6 +141,11 @@ class Room:
         # - name (nazwa przedmiotu)
         # - value (ilość punktów HP które przywraca)
 
+class Item:
+    def __init__(self,name,value):
+        self.name = name
+        self.value = value
+
 
 
 #######################################################################
@@ -142,15 +159,28 @@ class Room:
 
 #move_f(player) - przesuwa gracza o 1 pole do przodu
 
+def move_f(player):
+    player.pos_x = player.pos_x
+    player.pos_y = player.pos_y + 1
+
 
 #move_b(player) - przesuwa gracza o 1 pole do tyłu
 
+def move_b(player):
+    player.pos_x = player.pos_x
+    player.pos_y = player.pos_y - 1
 
 #move_l(player) - przesuwa gracza o 1 pole w lewo
 
+def move_l(player):
+    player.pos_x = player.pos_x + 1
+    player.pos_y = player.pos_y 
 
 #move_r(player) - przesuwa gracza o 1 pole w prawo
 
+def move_r(player):
+    player.pos_x = player.pos_x - 1
+    player.pos_y = player.pos_y 
 
 
 #Dice 
@@ -180,5 +210,12 @@ def throw_coin():
 
 game_map = Map(5,7)
 
+game_map.generate_map(5,7)
 
-game_map.generate_map(5,7)  
+
+Stefan = Player('Stefan',30,0,1,0,'fist','Stefan',[])
+print(Stefan.pos_x, Stefan.pos_y)
+
+move_f(Stefan)
+print(Stefan.pos_x, Stefan.pos_y)
+
