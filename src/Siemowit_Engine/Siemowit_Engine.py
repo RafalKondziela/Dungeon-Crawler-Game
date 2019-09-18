@@ -57,7 +57,7 @@ class Weapon:
     # - HP(Ilość życia potwora)
     # - ATT (ilość ataku potwora)
 
-class Moster:
+class Monster:
     def __init__(self,name,HP,ATT):
         self.name = name
         self.HP = HP
@@ -213,22 +213,62 @@ def throw_coin():
 def into_room(player,game_map):
     if(game_map[player.pos_y][player.pos_x] == 4):
         print("Jestę na statcie")
+        check_roads(player,game_map)
+        travel(Stefan)
     elif(new_map[player.pos_y][player.pos_x] == 1):
         print("Poszedłem do przodu")
+        check_roads(player,game_map)
+        travel(Stefan)
+        
 
 
 
 #Metoda sprawdzająca możliwe ścierzki i wyświetlająca opcje podróży na ekranie
 def check_roads(player,game_map):
-    if(game_map[player.pos_y + 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+    if(game_map[player.pos_y + 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 6):
         print("Naciśnij 'f' aby iść naprzód")
-    if(game_map[player.pos_y - 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+    if(game_map[player.pos_y - 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 4 or game_map[player.pos_y + 1][player.pos_x] == 6):
         print("Naciśnij 'b' aby iść do tylu")
-    if(game_map[player.pos_y][player.pos_x + 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+    if(game_map[player.pos_y][player.pos_x + 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 4 or game_map[player.pos_y + 1][player.pos_x] == 6):
         print("Naciśnij 'l' aby iść w lewo")
-    if(game_map[player.pos_y][player.pos_x - 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5):
+    if(game_map[player.pos_y][player.pos_x - 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 4 or game_map[player.pos_y + 1][player.pos_x] == 6):
         print("Naciśnij 'r' aby iść w prawo")
+    
 
+
+#Metoda do podróżowania po mapie
+def travel(player):
+    chosen_path = input('Wybierz ścierzkę: ')
+    if(chosen_path.lower() == 'f'):
+        move_f(player)
+    if(chosen_path.lower() == 'b'):
+        move_b(player)
+    if(chosen_path.lower() == 'l'):
+        move_l(player)
+    if(chosen_path.lower() == 'r'):
+        move_r(player)
+
+
+#Metoda służąca do walki między graczem a potworem
+def fight(player,monster):
+    while(player.HP > 0 or monster.HP > 0):
+        print(player.name  , '**************' , player.HP)
+        print(monster.name , '**************' , monster.HP)
+        action = input("wciśnij 'a' aby zaatakować: ")
+        if(action.lower() == 'a'):
+            att = throw_K(6) + player.base_ATT #tu testowo 6 docelowo bedzie zależne od broni
+            print(att)
+            monster.HP -= att
+            if(monster.HP > 0):
+                att = throw_K(monster.ATT)
+                print(att)
+                player.HP -= att
+                if(player.HP <= 0):
+                    print("porażka")
+                    break
+            else:
+                print("zwycięstwo")
+                break
 
 #######################################################################
 #Temporary test area :
@@ -239,15 +279,16 @@ new_map = game_map.generate_map(5,7)
 
 
 Stefan = Player('Stefan',30,0,1,0,'fist','Stefan',[])
-print(Stefan.pos_x, Stefan.pos_y)
+Rat = Monster('Rat',15,5)
 
 
-print(Stefan.pos_x, Stefan.pos_y)
+#for x in range(5):
+   # into_room(Stefan,new_map)
 
-into_room(Stefan,new_map)
-check_roads(Stefan,new_map)
-move_f(Stefan)
-into_room(Stefan,new_map)
-check_roads(Stefan,new_map)
+fight(Stefan,Rat)
+
+
+
+
 
 
