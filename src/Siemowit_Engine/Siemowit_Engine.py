@@ -28,7 +28,7 @@ import numpy as np
 class Player:
     pos_x = 3
     pos_y = 0
-    def __init__(self,name,HP,base_ATT,lvl,exp,equipped_weapon,Class,equipment):
+    def __init__(self,name,HP,base_ATT,lvl,exp,equipped_weapon,Class,equipment,exp_to_lvl):
         self.name = name
         self.HP = HP
         self.base_ATT = base_ATT
@@ -37,6 +37,7 @@ class Player:
         self.equipped_weapon = equipped_weapon
         self.Class = Class
         self.equipment = equipment
+        self.exp_to_lvl = exp_to_lvl
 
 #Weapon Class
 
@@ -58,10 +59,11 @@ class Weapon:
     # - ATT (ilość ataku potwora)
 
 class Monster:
-    def __init__(self,name,HP,ATT):
+    def __init__(self,name,HP,ATT,exp):
         self.name = name
         self.HP = HP
         self.ATT = ATT
+        self.exp = exp
 
 
 #Map Class
@@ -217,6 +219,10 @@ def into_room(player,game_map):
         travel(Stefan)
     elif(new_map[player.pos_y][player.pos_x] == 1):
         print("Poszedłem do przodu")
+        fight(Stefan,monsters,new_map)
+    elif(new_map[player.pos_y][player.pos_x] == 6):
+        print("Już tu byłem")
+        
         check_roads(player,game_map)
         travel(Stefan)
         
@@ -250,7 +256,8 @@ def travel(player):
 
 
 #Metoda służąca do walki między graczem a potworem
-def fight(player,monster):
+def fight(player,monsters,game_map):
+    monster = generate_monster(monsters)
     while(player.HP > 0 or monster.HP > 0):
         print(player.name  , '**************' , player.HP)
         print(monster.name , '**************' , monster.HP)
@@ -267,25 +274,41 @@ def fight(player,monster):
                     print("porażka")
                     break
             else:
-                print("zwycięstwo")
+                game_map[player.pos_y][player.pos_x] = 6 #zmiana lokacji na odwiedzoną
+                print("zwycięstwo. Otrzymujesz: ", monster.exp, "doświadczenia")
+                level_up(player,monster)
                 break
+
+
+#Metoda służąca do podnoszenia lvlu gracza po zdobyciu odpowiediej liczby doświadczenia
+def level_up(player,monster):
+    player.exp += monster.exp
+    if(player.exp == player.exp_to_lvl):
+        player.lvl += 1
+        player.exp_to_lvl *= 2
+
+
+#Metoda do losowania potwora do lokacji
+def generate_monster(monsters):
+    monster = random.choice(monsters)
+    return monster
 
 #######################################################################
 #Temporary test area :
 
-game_map = Map(5,7)
+#game_map = Map(5,7)
 
-new_map = game_map.generate_map(5,7)
-
-
-Stefan = Player('Stefan',30,0,1,0,'fist','Stefan',[])
-Rat = Monster('Rat',15,5)
+#new_map = game_map.generate_map(5,7)
 
 
+#Stefan = Player('Stefan',30,0,1,0,'fist','Stefan',{},30)
+#Rat = Monster('Rat',15,5,10)
+
+#TODO zobacz czemu nie można sie cofnąć na start !!!
 #for x in range(5):
-   # into_room(Stefan,new_map)
+  # into_room(Stefan,new_map)
 
-fight(Stefan,Rat)
+#fight(Stefan,Rat,new_map)
 
 
 
