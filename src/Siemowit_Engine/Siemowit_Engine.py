@@ -26,8 +26,8 @@ import numpy as np
     # - Equipment (słownik w formie (przedmiot : ile_przedmiotu))
 
 class Player:
-    pos_x = 3
-    pos_y = 0
+    pos_x = 0
+    pos_y = 3
     def __init__(self,name,HP,base_ATT,lvl,exp,equipped_weapon,Class,equipment,exp_to_lvl):
         self.name = name
         self.HP = HP
@@ -97,7 +97,7 @@ class Map:
                             new_map[x][y] = 1
                         else:
                             new_map[x][y] = 0
-                    if(x > 0 and x < 3 and new_map[x - 1][y] == 1):
+                    if(y > 0 and y < 3 and new_map[x][y - 1] == 1):
                         new_map[x][y] = 1
                     else:
                         throw = throw_coin()
@@ -105,15 +105,20 @@ class Map:
                             new_map[x][y] = 1
                         else:
                             new_map[x][y] = 0
-                    if(x > 3 and (new_map[x - 1][y] == 1 or new_map[x - 1][y] == 4 or new_map[x - 1][y] == 5)):
+                    if(y == 4):
                         throw = throw_coin()
                         if(throw == 1):
                             new_map[x][y] = 1
                         else:
                             new_map[x][y] = 0
+                    if(y > 4 and new_map[x][y - 1] == 1):
+                        new_map[x][y] = 1
+                    if(y > 4 and new_map[x][y - 1] == 0):
+                            new_map[x][y] = 0
                     
                         
-   #Poprawić generowanie mapy jak już ustale dla czego sie nie generuje tak jak chce
+                        
+   
    #Dodać podział na generowanie ze względu na level                         
                     
                     
@@ -166,27 +171,27 @@ class Item:
 #move_f(player) - przesuwa gracza o 1 pole do przodu
 
 def move_f(player):
-    player.pos_x = player.pos_x
-    player.pos_y = player.pos_y + 1
+    player.pos_x = player.pos_x + 1
+    player.pos_y = player.pos_y 
 
 
 #move_b(player) - przesuwa gracza o 1 pole do tyłu
 
 def move_b(player):
-    player.pos_x = player.pos_x
-    player.pos_y = player.pos_y - 1
+    player.pos_x = player.pos_x - 1
+    player.pos_y = player.pos_y 
 
 #move_l(player) - przesuwa gracza o 1 pole w lewo
 
 def move_l(player):
-    player.pos_x = player.pos_x + 1
-    player.pos_y = player.pos_y 
+    player.pos_x = player.pos_x 
+    player.pos_y = player.pos_y + 1
 
 #move_r(player) - przesuwa gracza o 1 pole w prawo
 
 def move_r(player):
-    player.pos_x = player.pos_x - 1
-    player.pos_y = player.pos_y 
+    player.pos_x = player.pos_x 
+    player.pos_y = player.pos_y - 1
 
 
 #Dice 
@@ -212,32 +217,28 @@ def throw_coin():
 
 #Metoda sprawdzająca pozycję gracza na mapie losująca lokacje z dostępnej listy
 #dodająca wylosowanego potwora do lokacji i zarządzająca co dalej
-def into_room(player,game_map):
-    if(game_map[player.pos_y][player.pos_x] == 4):
+def into_room(player,game_map,monsters):
+    if(game_map[player.pos_x][player.pos_y] == 4):
         print("Jestę na statcie")
-        check_roads(player,game_map)
-        travel(Stefan)
-    elif(new_map[player.pos_y][player.pos_x] == 1):
+    elif(game_map[player.pos_x][player.pos_y] == 1):
+        #fight(player,monsters,game_map)
         print("Poszedłem do przodu")
-        fight(Stefan,monsters,new_map)
-    elif(new_map[player.pos_y][player.pos_x] == 6):
+    elif(game_map[player.pos_x][player.pos_y] == 6):
         print("Już tu byłem")
         
-        check_roads(player,game_map)
-        travel(Stefan)
         
 
 
 
 #Metoda sprawdzająca możliwe ścierzki i wyświetlająca opcje podróży na ekranie
 def check_roads(player,game_map):
-    if(game_map[player.pos_y + 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 6):
+    if( game_map[player.pos_x + 1][player.pos_y] == 1 or game_map[player.pos_x + 1][player.pos_y] == 5 or game_map[player.pos_x + 1][player.pos_y] == 6):
         print("Naciśnij 'f' aby iść naprzód")
-    if(game_map[player.pos_y - 1][player.pos_x] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 4 or game_map[player.pos_y + 1][player.pos_x] == 6):
+    if((player.pos_x) > 0 and game_map[player.pos_x - 1][player.pos_y] == 1 or game_map[player.pos_x - 1][player.pos_y] == 5 or game_map[player.pos_x - 1][player.pos_y] == 4 or game_map[player.pos_x - 1][player.pos_y] == 6):
         print("Naciśnij 'b' aby iść do tylu")
-    if(game_map[player.pos_y][player.pos_x + 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 4 or game_map[player.pos_y + 1][player.pos_x] == 6):
+    if(game_map[player.pos_x ][player.pos_y + 1] == 1 or game_map[player.pos_x ][player.pos_y + 1] == 5 or game_map[player.pos_x ][player.pos_y + 1] == 4 or game_map[player.pos_x ][player.pos_y + 1] == 6):
         print("Naciśnij 'l' aby iść w lewo")
-    if(game_map[player.pos_y][player.pos_x - 1] == 1 or game_map[player.pos_y + 1][player.pos_x] == 5 or game_map[player.pos_y + 1][player.pos_x] == 4 or game_map[player.pos_y + 1][player.pos_x] == 6):
+    if(game_map[player.pos_x][player.pos_y - 1] == 1 or game_map[player.pos_x][player.pos_y - 1] == 5 or game_map[player.pos_x][player.pos_y - 1] == 4 or game_map[player.pos_x][player.pos_y - 1] == 6):
         print("Naciśnij 'r' aby iść w prawo")
     
 
@@ -247,12 +248,16 @@ def travel(player):
     chosen_path = input('Wybierz ścierzkę: ')
     if(chosen_path.lower() == 'f'):
         move_f(player)
+        print(player.pos_x, player.pos_y)
     if(chosen_path.lower() == 'b'):
         move_b(player)
+        print(player.pos_x, player.pos_y)
     if(chosen_path.lower() == 'l'):
         move_l(player)
+        print(player.pos_x, player.pos_y)
     if(chosen_path.lower() == 'r'):
         move_r(player)
+        print(player.pos_x, player.pos_y)
 
 
 #Metoda służąca do walki między graczem a potworem
@@ -274,7 +279,7 @@ def fight(player,monsters,game_map):
                     print("porażka")
                     break
             else:
-                game_map[player.pos_y][player.pos_x] = 6 #zmiana lokacji na odwiedzoną
+                game_map[player.pos_x][player.pos_y] = 6 #zmiana lokacji na odwiedzoną
                 print("zwycięstwo. Otrzymujesz: ", monster.exp, "doświadczenia")
                 level_up(player,monster)
                 break
@@ -290,7 +295,11 @@ def level_up(player,monster):
 
 #Metoda do losowania potwora do lokacji
 def generate_monster(monsters):
-    monster = random.choice(monsters)
+    choice = random.choice(monsters)
+    if(choice == 'Rat'):
+        monster = Monster('Rat',15,5,10)
+    elif(choice == 'Bat'):
+        monster == Monster('Bat',10,3,5)
     return monster
 
 #######################################################################
