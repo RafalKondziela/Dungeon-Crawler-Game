@@ -1,4 +1,4 @@
-import random
+import random,time
 import numpy as np
 
 
@@ -217,12 +217,12 @@ def throw_coin():
 
 #Metoda sprawdzająca pozycję gracza na mapie losująca lokacje z dostępnej listy
 #dodająca wylosowanego potwora do lokacji i zarządzająca co dalej
-def into_room(player,game_map,monsters):
+def into_room(player,game_map,monsters,item):
     if(game_map[player.pos_x][player.pos_y] == 4):
         print("Jestę na statcie")
     elif(game_map[player.pos_x][player.pos_y] == 1):
-        #fight(player,monsters,game_map)
         print("Poszedłem do przodu")
+        fight(player,monsters,game_map,item)
     elif(game_map[player.pos_x][player.pos_y] == 6):
         print("Już tu byłem")
         
@@ -261,12 +261,13 @@ def travel(player):
 
 
 #Metoda służąca do walki między graczem a potworem
-def fight(player,monsters,game_map):
+def fight(player,monsters,game_map,item):
     monster = generate_monster(monsters)
+    time.sleep(2)
     while(player.HP > 0 or monster.HP > 0):
         print(player.name  , '**************' , player.HP)
         print(monster.name , '**************' , monster.HP)
-        action = input("wciśnij 'a' aby zaatakować: ")
+        action = input("wciśnij 'a' aby zaatakować lub 'i' aby użyć przedmiotu: ")
         if(action.lower() == 'a'):
             att = throw_K(6) + player.base_ATT #tu testowo 6 docelowo bedzie zależne od broni
             print(att)
@@ -283,6 +284,12 @@ def fight(player,monsters,game_map):
                 print("zwycięstwo. Otrzymujesz: ", monster.exp, "doświadczenia")
                 level_up(player,monster)
                 break
+        if(action.lower() == 'i'):
+                print(player.HP)
+                heal = item.value
+                player.HP += heal
+                print(player.HP)
+                
 
 
 #Metoda służąca do podnoszenia lvlu gracza po zdobyciu odpowiediej liczby doświadczenia
