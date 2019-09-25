@@ -80,7 +80,7 @@ class Map:
         
         
 
-    def generate_map(self,fields_x, fields_y):
+    def generate_map(self,fields_x, fields_y): #Dodać zmiane na ostatniej linii ma być tylko boss
         new_map = np.zeros(shape =(fields_x,fields_y))
         for x in range(0,fields_x):
             for y in range(0,fields_y):
@@ -229,7 +229,7 @@ def into_room(player,game_map,monsters,item,room1,room2):
             fight(player,monster,game_map,item)
         elif(throw == 0):
             room2.show_description
-            loot_coin(player)
+            loot_coin(player,game_map)
     elif(game_map[player.pos_x][player.pos_y] == 6):
         print("Już tu byłem")
         
@@ -307,17 +307,13 @@ def level_up(player,monster):
 
 #Metoda do losowania potwora do lokacji
 def generate_monster(monsters):
-    choice = random.choice(monsters)
-   # if(choice == 'Rat'):
-       # monster = Monster('Rat',15,5,10)
-   # elif(choice == 'Bat'):
-    #    monster == Monster('Bat',10,3,5)
-    monster = Monster('Rat',15,5,10)
+    name = random.choice(monsters)
+    monster = Monster(name,15,5,10)
     return monster
 
 
 #Metoda do dodawania golda dla gracza
-def loot_coin(player): #do dokończenia dodawanie golda do eq
+def loot_coin(player,game_map): #do dokończenia dodawanie golda do eq
     amount = throw_K(50)
     print("dostałeś ", amount, " golda")
     game_map[player.pos_x][player.pos_y] = 6
