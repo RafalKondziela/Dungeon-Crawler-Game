@@ -217,12 +217,19 @@ def throw_coin():
 
 #Metoda sprawdzająca pozycję gracza na mapie losująca lokacje z dostępnej listy
 #dodająca wylosowanego potwora do lokacji i zarządzająca co dalej
-def into_room(player,game_map,monsters,item):
+def into_room(player,game_map,monsters,item,room1,room2):
     if(game_map[player.pos_x][player.pos_y] == 4):
         print("Jestę na statcie")
     elif(game_map[player.pos_x][player.pos_y] == 1):
         print("Poszedłem do przodu")
-        fight(player,monsters,game_map,item)
+        monster = generate_monster(monsters)
+        throw = throw_coin()
+        if(throw == 1):
+            room1.show_description
+            fight(player,monster,game_map,item)
+        elif(throw == 0):
+            room2.show_description
+            loot_coin(player)
     elif(game_map[player.pos_x][player.pos_y] == 6):
         print("Już tu byłem")
         
@@ -261,9 +268,7 @@ def travel(player):
 
 
 #Metoda służąca do walki między graczem a potworem
-def fight(player,monsters,game_map,item):
-    monster = generate_monster(monsters)
-    time.sleep(2)
+def fight(player,monster,game_map,item):
     while(player.HP > 0 or monster.HP > 0):
         print(player.name  , '**************' , player.HP)
         print(monster.name , '**************' , monster.HP)
@@ -284,7 +289,7 @@ def fight(player,monsters,game_map,item):
                 print("zwycięstwo. Otrzymujesz: ", monster.exp, "doświadczenia")
                 level_up(player,monster)
                 break
-        if(action.lower() == 'i'):
+        if(action.lower() == 'i'): #Dlaczego to psuje następną walke ???
                 print(player.HP)
                 heal = item.value
                 player.HP += heal
@@ -303,12 +308,19 @@ def level_up(player,monster):
 #Metoda do losowania potwora do lokacji
 def generate_monster(monsters):
     choice = random.choice(monsters)
-    if(choice == 'Rat'):
-        monster = Monster('Rat',15,5,10)
-    elif(choice == 'Bat'):
-        monster == Monster('Bat',10,3,5)
+   # if(choice == 'Rat'):
+       # monster = Monster('Rat',15,5,10)
+   # elif(choice == 'Bat'):
+    #    monster == Monster('Bat',10,3,5)
+    monster = Monster('Rat',15,5,10)
     return monster
 
+
+#Metoda do dodawania golda dla gracza
+def loot_coin(player): #do dokończenia dodawanie golda do eq
+    amount = throw_K(50)
+    print("dostałeś ", amount, " golda")
+    game_map[player.pos_x][player.pos_y] = 6
 #######################################################################
 #Temporary test area :
 
@@ -325,6 +337,7 @@ def generate_monster(monsters):
   # into_room(Stefan,new_map)
 
 #fight(Stefan,Rat,new_map)
+
 
 
 
